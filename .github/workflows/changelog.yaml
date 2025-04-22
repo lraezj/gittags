@@ -1,0 +1,32 @@
+name: Generación CHANGELOG.md
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repo
+        uses: actions/checkout@v3
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Generar changelog con standard-version
+        run: npx standard-version --skip.tag true
+
+      - name: Commit del changelog generado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md package.json package-lock.json
+          git commit -m "chore(release): actualizar changelog y versión"
+          git push origin HEAD:main
