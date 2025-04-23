@@ -4,36 +4,35 @@ on:
   release:
     types: [created]
 
+permissions:
+  contents: write
+
 jobs:
   changelog:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
-      - name: Checkout del repo
+      - name: Checkout del repositorio
         uses: actions/checkout@v3
 
-      - name: Configurar Node
+      - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: Instalar dependencias
-        run: npm install
+      - name: Instalar dependencias necesarias
+        run: npm install --save-dev conventional-changelog-cli
 
-      - name: Crear changelog si no existe
+      - name: Crear archivo changelog si no existe
         run: |
           if [ ! -f CHANGELOG.md ]; then
             touch CHANGELOG.md
           fi
 
-      - name: Generar CHANGELOG.md
-        run: npm run generate-changelog
+      - name: Generar/Actualizar el changelog
+        run: npx conventional-changelog -p angular -i CHANGELOG.md -s -r 0
 
-      - name: Commit y Push del changelog
+      - name: Hacer commit y push del changelog
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -41,4 +40,4 @@ jobs:
           git commit -m "docs: actualizo changelog tras release"
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
