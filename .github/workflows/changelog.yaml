@@ -5,7 +5,7 @@ on:
     types: [created]
 
 jobs:
-  release:
+  changelog:
     runs-on: ubuntu-latest
 
     permissions:
@@ -13,11 +13,32 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Release Please Action
-        uses: googleapis/release-please-action@v4
+      - name: Checkout del repo
+        uses: actions/checkout@v3
+
+      - name: Configurar Node
+        uses: actions/setup-node@v3
         with:
-          release-type: node
-          package-name: changelog-auto
+          node-version: 18
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Crear changelog si no existe
+        run: |
+          if [ ! -f CHANGELOG.md ]; then
+            touch CHANGELOG.md
+          fi
+
+      - name: Generar CHANGELOG.md
+        run: npm run generate-changelog
+
+      - name: Commit y Push del changelog
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "docs: actualizo changelog tras release"
+          git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
