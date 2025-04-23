@@ -1,6 +1,10 @@
 {
-  "name": "changelog-auto",
-  "version": "0.0.0",
-  "main": "index.js",
-  "license": "MIT"
+  "name": "mi-proyecto",
+  "version": "1.0.0",
+  "scripts": {
+    "generate-changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+  },
+  "devDependencies": {
+    "conventional-changelog-cli": "^2.2.2"
+  }
 }
