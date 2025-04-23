@@ -1,9 +1,8 @@
 name: Generación CHANGELOG.md
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
   release:
