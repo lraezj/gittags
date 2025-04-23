@@ -1,10 +1,6 @@
- {
-  "name": "changelog format",
-  "version": "1.0.0",
-  "scripts": {
-    "release": "standard-version"
-  },
-  "devDependencies": {
-    "standard-version": "^9.5.0"
-  }
+{
+  "name": "changelog-auto",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT"
 }
