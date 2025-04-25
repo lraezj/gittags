@@ -17,20 +17,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Detectar y cambiar a la rama del release o crear una temporal
-        run: |
-          git fetch --all
-          BRANCH="${{ github.event.release.target_commitish }}"
-
-          if git ls-remote --heads origin "$BRANCH" | grep "$BRANCH"; then
-            echo "Cambiando a la rama $BRANCH"
-            git checkout "$BRANCH"
-          else
-            echo "No es una rama. Haciendo checkout al commit del tag y creando rama temporal"
-            git checkout "$BRANCH"    # checkout al commit (tag o SHA)
-            git checkout -b temp-release-branch
-          fi
-
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
