@@ -12,10 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del repositorio
+      - name: Checkout del repositorio (con refs completos)
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+           fetch-depth: 0
+           fetch-tags: true
+           ref: ${{ github.event.release.target_commitish }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
