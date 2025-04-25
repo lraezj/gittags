@@ -19,6 +19,15 @@ jobs:
            fetch-tags: true
            ref: ${{ github.event.release.target_commitish }}
 
+      - name: Cambiar a la rama del release
+        run: |
+          if git show-ref --verify --quiet refs/heads/${{ github.event.release.target_commitish }}; then
+           git checkout ${{ github.event.release.target_commitish }}
+          else
+           echo "Error: La rama '${{ github.event.release.target_commitish }}' no existe."
+           exit 1
+           fi
+
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
