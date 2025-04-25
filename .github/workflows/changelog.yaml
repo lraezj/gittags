@@ -12,11 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del repositorio con historial completo
+      - name: Checkout del repositorio
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ github.event.release.target_commitish }}
+
+      - name: Traer todas las ramas y hacer checkout de la rama del release
+        run: |
+          git fetch origin
+          git checkout ${{ github.event.release.target_commitish }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
