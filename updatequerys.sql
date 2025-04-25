@@ -1,1 +1,2 @@
-actualizaciòn de triggers y procesos almacenadoS
+actualizaciòn de triggers y procesos almacenados 
+Configuración de de usuarios 
