@@ -19,14 +19,21 @@ jobs:
            fetch-tags: true
            ref: ${{ github.event.release.target_commitish }}
 
-      - name: Cambiar a la rama del release
-        run: |
-          if git show-ref --verify --quiet refs/heads/${{ github.event.release.target_commitish }}; then
-           git checkout ${{ github.event.release.target_commitish }}
-          else
-           echo "Error: La rama '${{ github.event.release.target_commitish }}' no existe."
-           exit 1
-           fi
+      -  name: Detectar y cambiar a la rama del release o crear una temporal
+         run: |
+           
+           git fetch origin '+refs/heads/*:refs/remotes/origin/*'
+
+           BRANCH="${{ github.event.release.target_commitish }}"
+
+           if git show-ref --quiet refs/remotes/origin/$BRANCH; then
+             echo "Cambiando a la rama $BRANCH"
+             git checkout -B $BRANCH origin/$BRANCH
+           else
+              echo "No es una rama. Haciendo checkout al commit del tag y creando rama temporal"
+             git checkout "$BRANCH"
+              git checkout -b temp-release-branch
+            fi
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
