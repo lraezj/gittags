@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del repositorio
+      - name: Checkout del repositorio con historial completo
         uses: actions/checkout@v3
-
-      - name: Cambiar a la rama del release
-        run: git checkout ${{ github.event.release.target_commitish }}
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.release.target_commitish }}
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
@@ -50,5 +50,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add CHANGELOG.md
-          git commit -m "docs: actualizo changelog tras release" || echo "No hay cambios para commitear"
+          git commit -m "docs: actualizo changelog tras release" || echo "Sin cambios para commitear"
           git push origin HEAD:${{ github.event.release.target_commitish }}
