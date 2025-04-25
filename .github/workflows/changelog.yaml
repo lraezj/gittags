@@ -2,7 +2,7 @@ name: Generación CHANGELOG.md
 
 on:
   release:
-    types: [created, published]
+    types: [published]
 
 permissions:
   contents: write
