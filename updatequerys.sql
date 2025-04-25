@@ -1,1 +1,1 @@
-actualizaciòn de triggers
+actualizaciòn de triggers y procesos almacenadoS
