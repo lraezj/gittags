@@ -17,10 +17,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Traer todas las ramas y hacer checkout de la rama del release
+      - name: Detectar y cambiar a la rama del release o crear una temporal
         run: |
           git fetch origin
-          git checkout ${{ github.event.release.target_commitish }}
+          BRANCH="${{ github.event.release.target_commitish }}"
+
+          # Si es una rama, cambiamos a ella
+          if git ls-remote --heads origin $BRANCH | grep $BRANCH; then
+            echo "Cambiando a la rama $BRANCH"
+            git checkout $BRANCH
+          else
+            echo "No es una rama. Creamos rama temporal desde el tag/commit."
+            git checkout -b temp-release-branch
+          fi
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
@@ -55,4 +64,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add CHANGELOG.md
           git commit -m "docs: actualizo changelog tras release" || echo "Sin cambios para commitear"
-          git push origin HEAD:${{ github.event.release.target_commitish }}
+          git push origin HEAD:${{ github.event.release.target_commitish }} || echo "No se pudo pushear a la rama original, quizás fue un tag directo."
+
